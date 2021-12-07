@@ -117,8 +117,7 @@ public class NftService {
     	
     	for(int i =0; i<accountList.size(); i++) {
     		if(irepo.checkID(accountList.get(i).getTokenId()).isEmpty()) {
-    	        saveNftdb(accountList.get(i));
-    	        	
+    	        saveNftdb(accountList.get(i));  	
 
     		}
     	}
@@ -131,7 +130,7 @@ public class NftService {
     	System.out.println(irepo.findByWallet(wallet_address));
     	
 
-	       return new ResponseEntity<JSONObject>(getNftInfoResult("true",irepo.findByWallet(wallet_address)), HttpStatus.CONFLICT);
+	       return new ResponseEntity<JSONObject>(getNftInfoResult("true",irepo.findByWallet(wallet_address)), HttpStatus.CREATED);
     }
     
     //컨트랙트에 있는 모든 nft 정보를 읽어온다.
