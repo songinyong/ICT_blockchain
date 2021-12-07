@@ -52,10 +52,10 @@ public class IndexController {
 	}
 	
 	@PostMapping("/chain/findnft")
-	public ResponseEntity<JSONObject> findnftbywalletaddress(@RequestBody SearchByWallet sbw) throws ParseException {
+	public ResponseEntity<JSONObject> findnftbywalletaddress(@RequestParam("address") String wallet) throws ParseException {
 
 
-		return nfts.interdbbywallet(sbw.getWallet_address()) ;
+		return nfts.interdbbywallet(wallet) ;
 	}
 	
 	//특정 사용자의 지갑 주소를 기준으로 사용자 소유의 nft 토큰들을 불러온다.
