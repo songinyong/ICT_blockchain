@@ -1,3 +1,11 @@
+/*
+ * 지갑을 생성해주는 서비스
+ * login 서비스가 이 서비스를 호출하여 지갑을 생성한후 DB에 저장한다.
+ * 
+ * 후에 카프카랑 연동해 처리할 예정
+ * 
+ * 최종작성일 21.12.06
+ * */
 package blockchain.service;
 
 import org.json.simple.JSONObject;
