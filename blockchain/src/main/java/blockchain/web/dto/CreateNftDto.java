@@ -1,3 +1,7 @@
+/*
+ * nft 아이템 만들때 사용하는 dto
+ * */
+
 package blockchain.web.dto;
 
 import java.time.LocalDateTime;
@@ -26,11 +30,10 @@ public class CreateNftDto {
 	private String image_path;
 	private String owner;
 	private int price;
-	private int sell_state;
-	private String createDate;
+
 	
 	@Builder()
-	public CreateNftDto(String nft_description, String nft_hash, String token_id, String title, String creator, String image_path, String owner, int price, int sell_state) {
+	public CreateNftDto(String nft_description, String nft_hash, String token_id, String title, String creator, String image_path, String owner, int price) {
 		this.nft_description = nft_description;
 		this.nft_hash = nft_hash;
 		this.token_id = token_id;
@@ -39,7 +42,7 @@ public class CreateNftDto {
 		this.image_path = image_path;
 		this.owner = owner;
 		this.price = price;
-		this.sell_state =sell_state;
+
 		
 	}
 	
@@ -53,7 +56,7 @@ public class CreateNftDto {
 				.image_path(image_path)
 				.owner(owner)
 				.price(price)
-				.sell_state(sell_state)
+
 				.build();
 	}
 }

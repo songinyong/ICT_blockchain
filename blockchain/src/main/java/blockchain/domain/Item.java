@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name="item")
-public class Item extends CreateTimeEntity {
+public class Item extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,15 +44,17 @@ public class Item extends CreateTimeEntity {
 	private String owner;
 	@Column()
 	private int price;
+	
 	@CreatedDate
-	@Column(updatable = false)
 	private LocalDateTime createdDate;
 	
-	@Column()
-	private int sell_state;
+	@LastModifiedDate
+	private LocalDateTime modifiedDate;
+	
+
 	
 	@Builder()
-	public Item(String nft_description, String nft_hash, String token_id, String title, String creator, String image_path, String owner, int price, int sell_state) {
+	public Item(String nft_description, String nft_hash, String token_id, String title, String creator, String image_path, String owner, int price) {
 		this.nft_description = nft_description;
 		this.nft_hash = nft_hash;
 		this.token_id = token_id;
@@ -60,7 +63,7 @@ public class Item extends CreateTimeEntity {
 		this.image_path = image_path;
 		this.owner = owner;
 		this.price = price;
-		this.sell_state =sell_state;
+
 	}
 	
 }

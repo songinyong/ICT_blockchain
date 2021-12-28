@@ -1,3 +1,7 @@
+/*
+ * 아이템 테이블에 매핑되는 repository
+ * */
+
 package blockchain.domain;
 
 import java.util.List;
@@ -19,5 +23,8 @@ public interface ItemRepository extends JpaRepository<Item, Long>{
 	
 	@Query(value="SELECT * FROM Item i WHERE i.owner =?1 ", nativeQuery = true)
 	List<Item> findByWallet(String wallet);
+	
+    @Query(value= "SELECT i FROM Item i")
+    List<Item> findAllItems();
 
 }
