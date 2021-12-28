@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import blockchain.service.CreateTransaction;
+import blockchain.service.CreateTransactionService;
 import blockchain.service.CreateWalletService;
 import blockchain.service.NftService;
 import blockchain.web.dto.SearchByWallet;
@@ -28,7 +28,7 @@ public class IndexController {
 	NftService nfts;
 	
 	@Autowired
-	CreateTransaction ctran;
+	CreateTransactionService ctran;
 	
 	@Value("${token.header}")
 	String header ;
@@ -56,6 +56,12 @@ public class IndexController {
 
 
 		return nfts.interdbbywallet(wallet) ;
+	}
+	
+	@PostMapping("/chain/trade")
+	public ResponseEntity<JSONObject> tradenft() {
+		
+		return ctran.createTransaction();
 	}
 	
 	//특정 사용자의 지갑 주소를 기준으로 사용자 소유의 nft 토큰들을 불러온다.

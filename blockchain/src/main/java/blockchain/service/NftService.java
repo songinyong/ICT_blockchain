@@ -55,26 +55,26 @@ public class NftService {
     	CreateNftDto nftdto = new CreateNftDto();
 		RestTemplate rt = new RestTemplate();
 				
-		MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-		
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-type", "application/json");
 		headers.set("x-chain-id", "1001");
 		headers.set("authorization", header);
-		//headers.set("x-krn", "krn:1001:wallet:34f7b5b9-8caa-4e25-8057-2302ccf0607f:account-pool:test");
-		//params.add("to", "0xa39c61e989bD868F1B0B7E398375E86EC9948B58");
-		params.add("id", String.valueOf("0x"+Long.toHexString(irepo.getMaxTransactionId()+2)));
-		System.out.println("0x"+Long.toHexString(irepo.getMaxTransactionId()+10));
-		params.add("uri", "/post/1");
-		System.out.println(params.values());
+	
+		JSONObject createData = new JSONObject();
+		createData.put("to", "0xa39c61e989bD868F1B0B7E398375E86EC9948B58");
+		createData.put("id", String.valueOf("0x"+Long.toHexString(irepo.getMaxTransactionId()+5)));
+		createData.put("uri", "https://cdna.artstation.com/p/assets/images/images/043/253/704/4k/romain-lebouleux-geothermal-plant-view1.jpg?1636732465");
 		
-		HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(params, headers); 
+		 HttpEntity<String> entity = 
+			      new HttpEntity<String>(createData.toString(), headers);
+		System.out.println(entity);
 		String uri = "https://kip17-api.klaytnapi.com/v1/contract/"+"arttoken"+"/token";
 		System.out.println(uri);
-		ResponseEntity<JSONObject> result =rt.exchange(uri, HttpMethod.POST,entity, JSONObject.class);
+		ResponseEntity<JSONObject> result =rt.exchange(uri, HttpMethod.POST, entity, JSONObject.class);
 		System.out.println(result);
 		
+		//결과 엔티티 상속 관계로 바꿔야함
 		return new ResponseEntity<JSONObject>(walletCreateResult("true", "test"), HttpStatus.ACCEPTED);
 		
 			}
@@ -103,6 +103,7 @@ public class NftService {
     
     //DB에 누락된 아이템 정보 있나 확인하고 있을시 db에 추가
     /*JSONObject는 리스트가 포함된 json 파싱이 어려워서 JsonNode로 대체하였음*/
+    
     public  ResponseEntity<JSONObject> interdb() throws ParseException {
     	ResponseEntity<JsonNode> response = checknftlist();
     	//JSONParser jsonParser = new JSONParser(); 
@@ -177,8 +178,10 @@ public class NftService {
     }
     
     
-    
-    public JSONObject walletCreateResult(String result,String wallet ) {
+    /*
+     * 결과 메서드들은 후에 리팩토링 진행
+     * */
+    private JSONObject walletCreateResult(String result,String wallet ) {
 		JSONObject resultObj = new JSONObject();  
 		resultObj.put("result",result);
 		resultObj.put("wallet_address",wallet);
@@ -186,7 +189,7 @@ public class NftService {
 		return resultObj ;
 	}
     
-    public JSONObject getNftInfoResult(String result, Object items) {
+    private JSONObject getNftInfoResult(String result, Object items) {
     	JSONObject resultObj = new JSONObject();  
 		resultObj.put("result",result);
 		resultObj.put("items", items);

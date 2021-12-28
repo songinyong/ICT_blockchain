@@ -32,6 +32,8 @@ public class CreateWalletService {
 	
 	@Autowired
 	WalletRepository wtrepo ;
+	
+	
     public ResponseEntity<JSONObject> createWallet() {
     	
     	CreateWalletDto cwdto = new CreateWalletDto();
@@ -58,7 +60,7 @@ public class CreateWalletService {
 		
 			}
     
-    public JSONObject walletCreateResult(String result,String wallet ) {
+    private JSONObject walletCreateResult(String result,String wallet ) {
 		JSONObject resultObj = new JSONObject();
 		resultObj.put("result",result);
 		resultObj.put("wallet_address",wallet);

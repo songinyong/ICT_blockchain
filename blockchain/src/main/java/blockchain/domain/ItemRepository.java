@@ -1,3 +1,7 @@
+/*
+ * 아이템 테이블에 매핑되는 repository
+ * */
+
 package blockchain.domain;
 
 import java.util.List;
