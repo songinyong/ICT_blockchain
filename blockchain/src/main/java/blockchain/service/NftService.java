@@ -64,20 +64,33 @@ public class NftService {
     	CreateNftDto nftdto = new CreateNftDto();
 		RestTemplate rt = new RestTemplate();
 				
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> refs/remotes/origin/main
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-type", "application/json");
 		headers.set("x-chain-id", "1001");
 		headers.set("authorization", header);
 	
 		JSONObject createData = new JSONObject();
+<<<<<<< HEAD
+=======
+		createData.put("to", "0xa39c61e989bD868F1B0B7E398375E86EC9948B58");
+		createData.put("id", String.valueOf("0x"+Long.toHexString(irepo.getMaxTransactionId()+5)));
+		createData.put("uri", "https://cdna.artstation.com/p/assets/images/images/043/253/704/4k/romain-lebouleux-geothermal-plant-view1.jpg?1636732465");
+>>>>>>> refs/remotes/origin/main
 		
+<<<<<<< HEAD
 		//nft아이템을 16진수로 바꾸어 저장한다.
 		String token_id = String.valueOf("0x"+Long.toHexString(irepo.getMaxTransactionId()+6));
 		createData.put("to", requestnftDto.getCreator());
 		createData.put("id", token_id);
 		createData.put("uri", requestnftDto.getUri());
 		
+=======
+>>>>>>> refs/remotes/origin/main
 		 HttpEntity<String> entity = 
 			      new HttpEntity<String>(createData.toString(), headers);
 		System.out.println(entity);
@@ -86,6 +99,7 @@ public class NftService {
 		ResponseEntity<JSONObject> result =rt.exchange(uri, HttpMethod.POST, entity, JSONObject.class);
 		System.out.println(result);
 		
+<<<<<<< HEAD
 		//생성된 nft 정보 DB에 저장하는 부분
 		nftdto.setCreator(requestnftDto.getCreator());
 		nftdto.setImage_path(requestnftDto.getUri());
@@ -96,6 +110,8 @@ public class NftService {
 		nftdto.setNft_description(requestnftDto.getNft_description());
 		nftdto.setNft_hash((String) result.getBody().get("transactionHash"));
 		saveNftdb(nftdto);
+=======
+>>>>>>> refs/remotes/origin/main
 		//결과 엔티티 상속 관계로 바꿔야함
 		return new ResponseEntity<JSONObject>(walletCreateResult("true", "test"), HttpStatus.ACCEPTED);
 		
@@ -124,11 +140,15 @@ public class NftService {
     }
     
     //DB에 누락된 아이템 정보 있나 확인하고 있을시 db에 추가
+<<<<<<< HEAD
     /* 컨트랙트와 블록체인DB와 동기화하기 위한 메서드 - 컨트랙트에 저장된 아이템 정보중 db에 없는 아이템이면 DB에 저장된다.
      * - 일부 데이터 누락됬을때의 문제 -> 아이템 등록 과정을 단계별로 나누어 해결할 에정
      * JSONObject는 리스트가 포함된 json 파싱이 어려워서 JsonNode로 대체하였음
      * ->JSON ARRAY로 대체할 가능성 남아있음
      * */
+=======
+    /*JSONObject는 리스트가 포함된 json 파싱이 어려워서 JsonNode로 대체하였음*/
+>>>>>>> refs/remotes/origin/main
     
     public  ResponseEntity<JSONObject> interdb() throws ParseException {
     	
@@ -283,8 +303,12 @@ public class NftService {
 		
     }
     
+<<<<<<< HEAD
     
     /* 실행 결과를 JSON 형태로 만드는 메서드
+=======
+    /*
+>>>>>>> refs/remotes/origin/main
      * 결과 메서드들은 후에 리팩토링 진행
      * */
     private JSONObject walletCreateResult(String result,String wallet ) {
