@@ -60,7 +60,7 @@ public class IndexController {
 		return nfts.interdbbywallet(wallet) ;
 	}
 	
-<<<<<<< HEAD
+
 	//DB에 저장된 모든 아이템 정보를 불러온다.
 	@GetMapping("/chain/findAllnfts")
 	public ResponseEntity<JSONObject> findAllnft() throws ParseException {
@@ -75,16 +75,7 @@ public class IndexController {
 		return ctran.createTransaction();
 	}
 	
-	@GetMapping("/test/test")
-	public void testest() {
-		nfts.testMultiValueMap();
-=======
-	@PostMapping("/chain/trade")
-	public ResponseEntity<JSONObject> tradenft() {
-		
-		return ctran.createTransaction();
->>>>>>> refs/remotes/origin/main
-	}
+
 	
 	//특정 사용자의 지갑 주소를 기준으로 사용자 소유의 nft 토큰들을 불러온다.
 	//request parameter 형식으로 받아오는데 카프카 적용할떄 같이 수정할 부분
