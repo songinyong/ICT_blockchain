@@ -258,20 +258,7 @@ public class NftService {
     	}
     }
     
-    /*
-    //동기화한 nft 아이템 정보 DB에 저장 - 22.01.02현재는 주로 테스트용으로 사용중
-    private boolean saveNftdb(SyncNftDto sydto) {
-    	try {
-    	irepo.save(sydto.toEntity());
-    	
-    	return true ;
-    	}
-    	catch(Exception e) {
-    		
-    	return false ;
-    	}
-    }*/
-    
+
     
     /*파라미터 테스트용 삭제할꺼임*/
     public void testMultiValueMap() {
