@@ -44,15 +44,15 @@ public class IndexController {
 	public ResponseEntity<JSONObject> createNft(@RequestBody RequestnftDto requestnftDto) {
 		return nfts.createNftbyapi(requestnftDto);
 	}
-	//컨트랙트 내에 있는 토큰 목록들을 불러온다.
-	@PostMapping("/chain/test")
+	//컨트랙트 내에 있는 토큰 목록들을 불러오고 아이디가 없을시 블록체인 DB에 아이템 정보 저장
+	@PostMapping("/chain/nfts")
 	public ResponseEntity<JSONObject> createtest() throws ParseException {
 
 
 		return nfts.interdb() ;
 	}
 	
-	//지갑 주소 기준 nft 아이템을 불러온다
+	//DB에서 지갑 주소 기준 nft 아이템을 불러온다
 	@PostMapping("/chain/findnft")
 	public ResponseEntity<JSONObject> findnftbywalletaddress(@RequestParam("address") String wallet) throws ParseException {
 
@@ -77,7 +77,7 @@ public class IndexController {
 	
 
 	
-	//특정 사용자의 지갑 주소를 기준으로 사용자 소유의 nft 토큰들을 불러온다.
+	//컨트렉트에서 특정 사용자의 지갑 주소를 기준으로 사용자 소유의 nft 토큰들을 불러온다.
 	//request parameter 형식으로 받아오는데 카프카 적용할떄 같이 수정할 부분
 	@PostMapping("/chain/getNftInfo")
 	public ResponseEntity<JSONObject> createTransaction(@RequestParam("address") String wallet) {

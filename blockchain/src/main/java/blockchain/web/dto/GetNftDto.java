@@ -21,7 +21,7 @@ public class GetNftDto {
 
 	private int price;
 	private LocalDateTime createdDate ;
-	private LocalDateTime modifieddDate ;
+	private LocalDateTime modifiedDate ;
 	private String nft_description;
 	private String nft_hash;
 	private String token_id;
@@ -34,7 +34,7 @@ public class GetNftDto {
         this.title = entity.getTitle();
         this.price = entity.getPrice();
         this.createdDate = entity.getCreatedDate();
-        this.modifieddDate = entity.getModifiedDate();
+        this.modifiedDate = entity.getModifiedDate();
         this.nft_description = entity.getNft_description();
         this.nft_hash = entity.getNft_hash();
         this.token_id = entity.getToken_id();
