@@ -19,7 +19,6 @@ public class GetNftDto {
 	
 	private String title ;
 
-	private int price;
 	private LocalDateTime createdDate ;
 	private LocalDateTime modifiedDate ;
 	private String nft_description;
@@ -32,7 +31,6 @@ public class GetNftDto {
 	
 	public GetNftDto(Item entity) {
         this.title = entity.getTitle();
-        this.price = entity.getPrice();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
         this.nft_description = entity.getNft_description();

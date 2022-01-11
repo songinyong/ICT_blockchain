@@ -42,8 +42,7 @@ public class Item extends BaseTimeEntity {
 	private String image_path;
 	@Column()
 	private String owner;
-	@Column()
-	private int price;
+
 	
 	@CreatedDate
 	private LocalDateTime createdDate;
@@ -54,7 +53,7 @@ public class Item extends BaseTimeEntity {
 
 	
 	@Builder()
-	public Item(String nft_description, String nft_hash, String token_id, String title, String creator, String image_path, String owner, int price) {
+	public Item(String nft_description, String nft_hash, String token_id, String title, String creator, String image_path, String owner) {
 		this.nft_description = nft_description;
 		this.nft_hash = nft_hash;
 		this.token_id = token_id;
@@ -62,7 +61,7 @@ public class Item extends BaseTimeEntity {
 		this.creator = creator;
 		this.image_path = image_path;
 		this.owner = owner;
-		this.price = price;
+
 
 	}
 	

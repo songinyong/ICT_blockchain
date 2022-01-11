@@ -97,7 +97,6 @@ public class NftService {
 		nftdto.setCreator(requestnftDto.getCreator());
 		nftdto.setImage_path(requestnftDto.getUri());
 		nftdto.setToken_id(token_id);
-		nftdto.setPrice(requestnftDto.getPrice());
 		nftdto.setOwner(requestnftDto.getCreator());
 		nftdto.setTitle(requestnftDto.getTitle());
 		nftdto.setNft_description(requestnftDto.getNft_description());
@@ -241,7 +240,6 @@ public class NftService {
     	cndto.setCreator(chkdto.getOwner());
     	cndto.setImage_path(chkdto.getTokenUri());
     	cndto.setNft_description("");
-    	cndto.setPrice(0);
     	cndto.setTitle("test");
     	
     	irepo.save(cndto.toEntity());
