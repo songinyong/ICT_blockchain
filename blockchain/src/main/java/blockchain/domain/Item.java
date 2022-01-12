@@ -65,4 +65,9 @@ public class Item extends BaseTimeEntity {
 
 	}
 	
+	// nft 거래시 owner 변경됨
+    public void update(String owner) {
+        this.owner = owner;
+    }
+	
 }

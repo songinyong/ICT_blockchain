@@ -9,12 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import blockchain.service.CreateTransactionService;
 import blockchain.service.CreateWalletService;
 import blockchain.service.NftService;
+import blockchain.service.TradeService;
+import blockchain.web.dto.CreateTradeDto;
 import blockchain.web.dto.RequestnftDto;
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +31,7 @@ public class IndexController {
 	NftService nfts;
 	
 	@Autowired
-	CreateTransactionService ctran;
+	TradeService tradeservice;
 	
 	@Value("${token.header}")
 	String header ;
@@ -69,10 +71,11 @@ public class IndexController {
 		return nfts.transferNftlist() ;
 	}
 	
-	@PostMapping("/chain/trade")
-	public ResponseEntity<JSONObject> tradenft() {
+	//아이템 소유권 이전
+	@PutMapping("/chain/trade")
+	public ResponseEntity<JSONObject> tradenft(@RequestBody CreateTradeDto ctdto) {
 		
-		return ctran.createTransaction();
+		return tradeservice.createTrade(ctdto);
 	}
 	
 
