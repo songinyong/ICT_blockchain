@@ -73,29 +73,41 @@ public class TradeService {
 			      new HttpEntity<String>(createData.toString(), headers);
 		String uri = "https://kip17-api.klaytnapi.com/v1/contract/arttoken/token/" + ctdto.getToken_id();
 		
-		ResponseEntity<JSONObject> result =rt.exchange(uri, HttpMethod.POST,entity, JSONObject.class);
 		
+		//잘못된 파라미터 입력하여 실해할시
+		try {
+		ResponseEntity<JSONObject> result =rt.exchange(uri, HttpMethod.POST,entity, JSONObject.class); 
+
+		//거래 성공했을때
 		if( result.getStatusCode().equals(HttpStatus.OK)) {
 			//거래 성공시 DB에 업데이트 
 			System.out.println(result.getBody().get("transactionHash"));
 			Optional<Item> item = itemRepository.findByTokenId(ctdto.getToken_id());
 		
-			
 			item.get().update(ctdto.getTo());
 			savetradelog(ctdto, (String) result.getBody().get("transactionHash"));
-			return new ResponseEntity<JSONObject>(tradeResult("true",ctdto.getSender(),ctdto.getTo()), HttpStatus.ACCEPTED);
+			return new ResponseEntity<JSONObject>(tradeResult("true",ctdto.getToken_id(),ctdto.getSender(),ctdto.getTo(), (String) result.getBody().get("transactionHash")), HttpStatus.ACCEPTED);
 		}
+		//거래 실패했을때
 		else 
-		
-		return new ResponseEntity<JSONObject>(tradeResult("false",ctdto.getSender(),ctdto.getTo()), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<JSONObject>(tradeResult("false",ctdto.getToken_id(),ctdto.getSender(),ctdto.getTo(),""), HttpStatus.BAD_REQUEST);
+		}
+		catch (Exception e) {
+			JSONObject resultObj = new JSONObject();  
+			resultObj.put("result","false");
+			resultObj.put("reason","bad request");
+			return new ResponseEntity<JSONObject>(  resultObj , HttpStatus.BAD_REQUEST);
+		}
 		
 			}
     
-    private JSONObject tradeResult(String result,String sender, String to ) {
+    private JSONObject tradeResult(String result,String token_id,String sender, String to, String hash ) {
 		JSONObject resultObj = new JSONObject();  
 		resultObj.put("result",result);
+		resultObj.put("token_id", token_id);
 		resultObj.put("sender",sender);
 		resultObj.put("to",to);
+		resultObj.put("hash", hash);
 		
 		return resultObj ;
 	}

@@ -194,8 +194,6 @@ public class NftService {
     }
     
 
-
-    
     // 게시물 아이템 DB와 블록체인 아이템DB를 연동하기 위한 메서드 - 현재 DB에 저장된 아이템 정보를 전송한다.
     public ResponseEntity<JSONObject> transferNftlist() {
     	RestTemplate rt = new RestTemplate();
@@ -231,8 +229,7 @@ public class NftService {
     private boolean saveNftdb(CheckNftDto chkdto) {
     	
     	try {
-    		
-    	
+   
     	CreateNftDto cndto = new CreateNftDto();
     	cndto.setToken_id(chkdto.getTokenId());
     	cndto.setNft_hash(chkdto.getTransactionHash());
@@ -251,8 +248,7 @@ public class NftService {
     	}
     }
     
-  /*nft 정보 db에 저장 - 아이템 등록후 생성된 정보 아이템 테이블에 저장
-   * 
+  /*nft 정보 db에 저장 - 아이템 등록후 생성된 정보 아이템 테이블에 저장 
    * */
     private boolean saveNftdb(CreateNftDto cftdto) {
     	
@@ -266,8 +262,6 @@ public class NftService {
     	return false ;
     	}
     }
-    
-
     
     /*파라미터 테스트용 삭제할꺼임*/
     public void testMultiValueMap() {
@@ -291,8 +285,6 @@ public class NftService {
 		System.out.println(response2.getBody().get("items").get(0).get("createdAt")); //response를 json 객체로 받고 원하는대로 다룰 수 있음
 		
     }
-    
-
     
     /* 실행 결과를 JSON 형태로 만드는 메서드
     /*
