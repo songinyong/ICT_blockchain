@@ -35,6 +35,8 @@ public class Item extends BaseTimeEntity {
 	@Column()
 	private String token_id ;
 	@Column()
+	private String token_name ;
+	@Column()
 	private String title;
 	@Column()
 	private String creator;
@@ -53,10 +55,11 @@ public class Item extends BaseTimeEntity {
 
 	
 	@Builder()
-	public Item(String nft_description, String nft_hash, String token_id, String title, String creator, String image_path, String owner) {
+	public Item(String nft_description, String nft_hash, String token_id, String token_name, String title, String creator, String image_path, String owner) {
 		this.nft_description = nft_description;
 		this.nft_hash = nft_hash;
 		this.token_id = token_id;
+		this.token_name = token_name;
 		this.title = title;
 		this.creator = creator;
 		this.image_path = image_path;
@@ -66,8 +69,9 @@ public class Item extends BaseTimeEntity {
 	}
 	
 	// nft 거래시 owner 변경됨
-    public void update(String owner) {
+    public void update(String owner, String new_hash) {
         this.owner = owner;
+        this.nft_hash = new_hash;
     }
 	
 }

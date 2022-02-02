@@ -72,13 +72,12 @@ public class NftService {
 		JSONObject createData = new JSONObject();
 
 		createData.put("to", "0xa39c61e989bD868F1B0B7E398375E86EC9948B58");
-		createData.put("id", String.valueOf("0x"+Long.toHexString(irepo.getMaxTransactionId()+5)));
+		createData.put("id", String.valueOf("0x"+Long.toHexString(irepo.getMaxTransactionId()+7)));
 		createData.put("uri", "https://cdna.artstation.com/p/assets/images/images/043/253/704/4k/romain-lebouleux-geothermal-plant-view1.jpg?1636732465");
 
 		
-
 		//nft아이템을 16진수로 바꾸어 저장한다.
-		String token_id = String.valueOf("0x"+Long.toHexString(irepo.getMaxTransactionId()+6));
+		String token_id = String.valueOf("0x"+Long.toHexString(irepo.getMaxTransactionId()+7));
 		createData.put("to", requestnftDto.getCreator());
 		createData.put("id", token_id);
 		createData.put("uri", requestnftDto.getUri());
@@ -263,6 +262,34 @@ public class NftService {
     	}
     }
     
+    /*토큰 거래 히스토리 조회 */
+    public ResponseEntity<JSONObject> getNftTradeInfo(String token_id) {
+    	RestTemplate rt = new RestTemplate();
+		
+    	HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-type", "application/json;charset=utf-8");
+		headers.set("authorization", header);
+		headers.set("x-chain-id", "1001");
+		HttpEntity request = new HttpEntity(headers);
+		JSONObject resultObj = new JSONObject();
+		try {
+			ResponseEntity<JsonNode> response = rt.exchange("https://kip17-api.klaytnapi.com/v1/contract/arttoken/token/"+ token_id  +"/history", HttpMethod.GET, request, JsonNode.class);
+			  
+			resultObj.put("result","true");
+			resultObj.put("items",response.getBody().get("items"));
+			
+			return new ResponseEntity<JSONObject>(resultObj, HttpStatus.ACCEPTED);
+		}
+		catch(Exception e) {
+			resultObj.put("result","true");
+			resultObj.put("reason",e);
+			
+			return new ResponseEntity<JSONObject>(resultObj, HttpStatus.ACCEPTED);
+		}
+
+    }
+    
+    
     /*파라미터 테스트용 삭제할꺼임*/
     public void testMultiValueMap() {
     	RestTemplate rt = new RestTemplate();
@@ -273,17 +300,9 @@ public class NftService {
 		headers.set("x-chain-id", "1001");
 		HttpEntity request = new HttpEntity(headers);
 
-		ResponseEntity<JSONObject> response = rt.exchange("https://kip17-api.klaytnapi.com/v1/contract/arttoken/token", HttpMethod.GET, request, JSONObject.class);
-    	ArrayList list1 = (ArrayList) response.getBody().get("items");
+		ResponseEntity<JSONObject> response = rt.exchange("https://kip7-api.klaytnapi.com/v1/contract/moonstone/minter/0xd8cbf22ec2b46732bd597027b79f7ab7814e70dd", HttpMethod.DELETE, request, JSONObject.class);
+    	System.out.println(response);
     	
-		System.out.println(response.getBody().get("items")); 
-
-		System.out.println(list1.get(0));
-    	
-		ResponseEntity<JsonNode> response2 = rt.exchange("https://kip17-api.klaytnapi.com/v1/contract/arttoken/token", HttpMethod.GET, request, JsonNode.class);
-		
-		System.out.println(response2.getBody().get("items").get(0).get("createdAt")); //response를 json 객체로 받고 원하는대로 다룰 수 있음
-		
     }
     
     /* 실행 결과를 JSON 형태로 만드는 메서드

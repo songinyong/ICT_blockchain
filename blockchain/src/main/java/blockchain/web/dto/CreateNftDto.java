@@ -25,6 +25,7 @@ public class CreateNftDto {
 	
 	//아이템 아이디를 16진수롤 변환해서 저장
 	private String token_id ;
+	private String token_name;
 	private String title;
 	private String creator;
 	private String image_path;
@@ -33,10 +34,11 @@ public class CreateNftDto {
 
 	
 	@Builder()
-	public CreateNftDto(String nft_description, String nft_hash, String token_id, String title, String creator, String image_path, String owner) {
+	public CreateNftDto(String nft_description, String nft_hash, String token_id, String tokenName, String title, String creator, String image_path, String owner) {
 		this.nft_description = nft_description;
 		this.nft_hash = nft_hash;
 		this.token_id = token_id;
+		this.token_name = tokenName;
 		this.title = title;
 		this.creator = creator;
 		this.image_path = image_path;
@@ -54,7 +56,7 @@ public class CreateNftDto {
 				.creator(creator)
 				.image_path(image_path)
 				.owner(owner)
-
+				.token_name("arttoken")
 				.build();
 	}
 }

@@ -16,16 +16,18 @@ public class CheckNftDto {
 	    private String owner;
 	    private String previousOwner;
 	    private String tokenId;
+	    private String tokenName;
 	    private String tokenUri;
 	    private String transactionHash;
 	    private String updatedAt;
 	    
 	    @Builder
-	    public CheckNftDto(String createdAt, String owner, String previousOwner, String tokenId, String tokenUri, String transactionHash, String updatedAt  ) {
+	    public CheckNftDto(String createdAt, String owner, String previousOwner, String tokenId, String tokenName , String tokenUri, String transactionHash, String updatedAt  ) {
 	    	this.createdAt = createdAt ;
 	    	this.owner = owner;
 	    	this.previousOwner = previousOwner;
 	    	this.tokenId = tokenId;
+	    	this.tokenName = tokenName;
 	    	this.tokenUri = tokenUri;
 	    	this.transactionHash = transactionHash;
 	    	this.updatedAt = updatedAt;

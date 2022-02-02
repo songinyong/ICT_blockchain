@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import blockchain.service.CreateWalletService;
 import blockchain.service.NftService;
 import blockchain.service.TradeService;
+import blockchain.service.WalletService;
+import blockchain.web.dto.CreateFtTTradeDto;
 import blockchain.web.dto.CreateTradeDto;
+import blockchain.web.dto.GetNftIdDto;
 import blockchain.web.dto.RequestnftDto;
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class IndexController {
 	@Autowired
-	CreateWalletService cws ;
+	WalletService wls ;
 
 	@Autowired
 	NftService nfts;
@@ -39,7 +41,7 @@ public class IndexController {
 	//api를 호출하면 지갑 주소를 생성한다.
 	@PostMapping("/chain/walletCreate")
 	public ResponseEntity<JSONObject> createWallet() {
-		return cws.createWallet();
+		return wls.createWallet();
 	}
 	//특정 사용자 소유의 nft 토큰을 만드는 서비스 
 	@PostMapping("/chain/nftCreate")
@@ -78,7 +80,40 @@ public class IndexController {
 		return tradeservice.createTrade(ctdto);
 	}
 	
+	//token_id로 아이템의 거래 기록 조회
+	@GetMapping("/chain/tradeinfo")
+	public ResponseEntity<JSONObject> getNftTradeInfo(@RequestParam("tokenId") String token_id) throws ParseException {
 
+		return nfts.getNftTradeInfo(token_id) ;
+	}
+
+	//FT 잔액 조회
+	@GetMapping("/chain/numOfFt")
+	public ResponseEntity<JSONObject> getNumOfFt(@RequestParam("address") String wallet) throws ParseException {
+
+		return wls.getNumOfFt(wallet) ;
+	}
+	
+	//token_id로 contract 정보 조회
+	@PostMapping("/chain/contractInfo")
+	public ResponseEntity<JSONObject> getContractInfo(@RequestBody GetNftIdDto getNftIdDto) throws ParseException {
+
+		return wls.getContractInfo(getNftIdDto) ;
+	}
+	
+	//FT token 교환
+	@PostMapping("/chain/ftTrade")
+	public ResponseEntity<JSONObject> createFtTrade(@RequestBody CreateFtTTradeDto createFtTradeDto) throws ParseException {
+
+		return tradeservice.createFtTrade(createFtTradeDto) ;
+	}
+	
+	
+	@PostMapping("/test")
+	public void test() throws ParseException {
+
+		nfts.testMultiValueMap() ;
+	}
 	
 	//컨트렉트에서 특정 사용자의 지갑 주소를 기준으로 사용자 소유의 nft 토큰들을 불러온다.
 	//request parameter 형식으로 받아오는데 카프카 적용할떄 같이 수정할 부분
