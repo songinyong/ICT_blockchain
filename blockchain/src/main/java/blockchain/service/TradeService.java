@@ -187,10 +187,5 @@ public class TradeService {
 		
 		return resultObj ;
 	}
-    
-	
-	
-	
-	
 	//FT 토큰 거래 완료후 trade 거래
 }

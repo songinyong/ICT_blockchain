@@ -86,7 +86,6 @@ public class WalletService {
 				System.out.println(token_alias);
 				ResponseEntity<JsonNode> response = rt.exchange("https://kip17-api.klaytnapi.com/v1/contract/"+ token_alias , HttpMethod.GET, request, JsonNode.class);
 			  
-				
 				resultObj.put("result","true");
 				resultObj.put("address",response.getBody().get("address"));
 				resultObj.put("alias",response.getBody().get("alias"));
@@ -99,10 +98,8 @@ public class WalletService {
 				resultObj.put("result","false");
 				resultObj.put("reason","ID 조회되지 않음");
 				
-				
 				return new ResponseEntity<JSONObject>(resultObj, HttpStatus.BAD_REQUEST);
-				
-				
+					
 			}
 			
 		}
