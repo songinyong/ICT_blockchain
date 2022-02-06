@@ -31,7 +31,6 @@ import blockchain.web.dto.GetNftIdDto;
 @Service
 public class WalletService {
 
-	
 	@Value("${token.header}")
 	String header ;
 	
@@ -40,9 +39,7 @@ public class WalletService {
 	
 	@Autowired
 	ItemRepository irepo;
-	
-
-	
+		
 	//사용자 지갑 생성
     public ResponseEntity<JSONObject> createWallet() {
     	

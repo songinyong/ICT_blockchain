@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -71,7 +72,7 @@ public class TradeService {
 		 HttpEntity<String> entity = 
 			      new HttpEntity<String>(createData.toString(), headers);
 		String uri = "https://kip17-api.klaytnapi.com/v1/contract/arttoken/token/" + ctdto.getToken_id();
-		
+		JSONObject resultObj = new JSONObject(); 
 		
 		//잘못된 파라미터 입력하여 실해할시
 		try {
@@ -91,14 +92,14 @@ public class TradeService {
 		else 
 		return new ResponseEntity<JSONObject>(tradeResult("false",ctdto.getToken_id(),ctdto.getSender(),ctdto.getTo(),""), HttpStatus.BAD_REQUEST);
 		}
-		catch (Exception e) {
-			JSONObject resultObj = new JSONObject();  
+		catch ( HttpClientErrorException e) {
+			 
 			resultObj.put("result","false");
 			resultObj.put("reason","bad request");
 			return new ResponseEntity<JSONObject>(  resultObj , HttpStatus.BAD_REQUEST);
 		}
-		
-			}
+
+	}
 	
     //거래 성공 200 OK 발생시 tradelog 정보 추가
     private boolean savetradelog(CreateTradeDto ctdto, String hash) {
@@ -130,23 +131,24 @@ public class TradeService {
 		headers.set("authorization", header);
 
 		JSONObject createData = new JSONObject();
-		createData.put("sender",  cftDto.getSender());
+		createData.put("from",  cftDto.getSender());
 		createData.put("to", cftDto.getTo());
 		createData.put("amount", cftDto.getAmount());
 		
 		 HttpEntity<String> entity = 
 			      new HttpEntity<String>(createData.toString(), headers);
+		System.out.println(entity);
 		String uri = "https://kip7-api.klaytnapi.com/v1/contract/moonstone/transfer" ;
 		
 		JSONObject resultObj = new JSONObject();
 		
 		try {
 			
-			ResponseEntity<JSONObject> response = rt.exchange(uri, HttpMethod.POST,entity, JSONObject.class);
+			ResponseEntity<JSONObject> response = rt.exchange(uri, HttpMethod.POST, entity, JSONObject.class);
 			System.out.println(response);
 			if( response.getStatusCode().equals(HttpStatus.OK)) {
 			
-				resultObj.put("result","true");
+				resultObj.put("result",true);
 				resultObj.put("transactionHash",response.getBody().get("transactionHash"));
 			
 				return new ResponseEntity<JSONObject>(resultObj, HttpStatus.ACCEPTED);
@@ -158,7 +160,13 @@ public class TradeService {
 				return new ResponseEntity<JSONObject>(resultObj, HttpStatus.BAD_REQUEST);
 			}
 		}
-		catch(Exception e) {
+		catch(HttpClientErrorException e) {
+			resultObj.put("result","false");
+			resultObj.put("reason","insufficient balance; amount");
+			
+			return new ResponseEntity<JSONObject>(resultObj, HttpStatus.BAD_REQUEST);
+		}
+		catch (Exception e) {
 			resultObj.put("result","false");
 			resultObj.put("reason",e);
 			
