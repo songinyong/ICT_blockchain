@@ -52,7 +52,6 @@ public class Item extends BaseTimeEntity {
 	@LastModifiedDate
 	private LocalDateTime modifiedDate;
 	
-
 	
 	@Builder()
 	public Item(String nft_description, String nft_hash, String token_id, String token_name, String title, String creator, String image_path, String owner) {

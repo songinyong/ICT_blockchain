@@ -1,19 +1,20 @@
 /*
  * nft 토큰을 발급하고 각 계정들의 가지고 있는 토큰이나 토큰 정보를 알려주는 서비스
  * 
- *  
  * */
 
 package blockchain.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.cloud.stream.messaging.Processor;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -31,11 +33,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import blockchain.domain.ItemRepository;
 import blockchain.domain.WalletRepository;
+import blockchain.domain.channel.NftInfoChannel;
 import blockchain.web.dto.CheckNftDto;
 import blockchain.web.dto.CreateNftDto;
 import blockchain.web.dto.GetNftDto;
 import blockchain.web.dto.RequestnftDto;
-import blockchain.web.dto.SyncNftDto;
 
 @Service
 public class NftService {
@@ -60,7 +62,7 @@ public class NftService {
 	사용자로부터 받은 정보를 우선 DB에저장 -> nft 아이템 등록후 나온 hash값들을 저장 트랜잭션 단위로 묶어서 등록 안되면 롤백 기능 제공  
 	*/
     public ResponseEntity<JSONObject> createNftbyapi(RequestnftDto requestnftDto) {
-    	System.out.println(contract_address);
+    	
     	CreateNftDto nftdto = new CreateNftDto();
 		RestTemplate rt = new RestTemplate();
 				
@@ -75,7 +77,6 @@ public class NftService {
 		createData.put("id", String.valueOf("0x"+Long.toHexString(irepo.getMaxTransactionId()+7)));
 		createData.put("uri", "https://cdna.artstation.com/p/assets/images/images/043/253/704/4k/romain-lebouleux-geothermal-plant-view1.jpg?1636732465");
 
-		
 		//nft아이템을 16진수로 바꾸어 저장한다.
 		String token_id = String.valueOf("0x"+Long.toHexString(irepo.getMaxTransactionId()+7));
 		createData.put("to", requestnftDto.getCreator());
@@ -85,13 +86,11 @@ public class NftService {
 
 		 HttpEntity<String> entity = 
 			      new HttpEntity<String>(createData.toString(), headers);
-		System.out.println(entity);
-		String uri = "https://kip17-api.klaytnapi.com/v1/contract/"+"arttoken"+"/token";
-		System.out.println(uri);
-		ResponseEntity<JSONObject> result =rt.exchange(uri, HttpMethod.POST, entity, JSONObject.class);
-		System.out.println(result);
 		
-
+		String uri = "https://kip17-api.klaytnapi.com/v1/contract/"+"arttoken"+"/token";
+		
+		ResponseEntity<JSONObject> result =rt.exchange(uri, HttpMethod.POST, entity, JSONObject.class);
+		
 		//생성된 nft 정보 DB에 저장하는 부분
 		nftdto.setCreator(requestnftDto.getCreator());
 		nftdto.setImage_path(requestnftDto.getUri());
@@ -121,11 +120,11 @@ public class NftService {
 		
 		HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(params, headers); 
 		String uri = "https://kip17-api.klaytnapi.com/v1/contract/arttoken/owner/"+wallet;
-		System.out.println(uri);
+		
 		ResponseEntity<JSONObject> result =rt.exchange(uri, HttpMethod.GET,entity, JSONObject.class);
-		System.out.println(result.getBody().get("items"));
+		
     	List test = (List) result.getBody().get("items") ;
-    	System.out.println(test.get(0));
+    	
     	return new ResponseEntity<JSONObject>(getNftInfoResult("true",result.getBody().get("items")), HttpStatus.ACCEPTED);
     }
     
@@ -168,12 +167,16 @@ public class NftService {
     	}
     }
     
+    //
     public ResponseEntity<JSONObject> interdbbywallet(String wallet_address) throws ParseException {
     	System.out.println(irepo.findByWallet(wallet_address));
     	
 
 	       return new ResponseEntity<JSONObject>(getNftInfoResult("true",irepo.findByWallet(wallet_address)), HttpStatus.CREATED);
     }
+    
+
+      
     
     //컨트랙트에 있는 모든 nft 정보를 읽어온다.
     private ResponseEntity<JsonNode> checknftlist() {
@@ -228,7 +231,7 @@ public class NftService {
     private boolean saveNftdb(CheckNftDto chkdto) {
     	
     	try {
-   
+  
     	CreateNftDto cndto = new CreateNftDto();
     	cndto.setToken_id(chkdto.getTokenId());
     	cndto.setNft_hash(chkdto.getTransactionHash());
@@ -289,9 +292,8 @@ public class NftService {
 
     }
     
-    
     /*파라미터 테스트용 삭제할꺼임*/
-    public void testMultiValueMap() {
+    public ResponseEntity<JSONObject> testMultiValueMap() {
     	RestTemplate rt = new RestTemplate();
 		
     	HttpHeaders headers = new HttpHeaders();
@@ -300,8 +302,12 @@ public class NftService {
 		headers.set("x-chain-id", "1001");
 		HttpEntity request = new HttpEntity(headers);
 
-		ResponseEntity<JSONObject> response = rt.exchange("https://kip7-api.klaytnapi.com/v1/contract/moonstone/minter/0xd8cbf22ec2b46732bd597027b79f7ab7814e70dd", HttpMethod.DELETE, request, JSONObject.class);
-    	System.out.println(response);
+		ResponseEntity<JSONObject> response = rt.exchange("https://kip17-api.klaytnapi.com/v1/contract/arttoken/token", HttpMethod.GET, request, JSONObject.class);
+    	
+		JSONArray items =  (JSONArray) response.getBody().get("items");
+		System.out.println(items);
+		
+		return response ;
     	
     }
     
@@ -329,4 +335,6 @@ public class NftService {
 		resultObj.put("result",result);
 		return resultObj;
     }
+    
+    
 }

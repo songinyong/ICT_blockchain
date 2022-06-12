@@ -31,8 +31,6 @@ public class CreateNftDto {
 	private String image_path;
 	private String owner;
 
-
-	
 	@Builder()
 	public CreateNftDto(String nft_description, String nft_hash, String token_id, String tokenName, String title, String creator, String image_path, String owner) {
 		this.nft_description = nft_description;
@@ -42,9 +40,7 @@ public class CreateNftDto {
 		this.title = title;
 		this.creator = creator;
 		this.image_path = image_path;
-		this.owner = owner;
-
-		
+		this.owner = owner;	
 	}
 	
 	public Item toEntity() {

@@ -47,10 +47,9 @@ public class Wallet  {
 	private String updatedAt;
 	
 	
-
 	@Builder
 	public Wallet(String address, String publicKey, String chainId, String createdAt, String updatedAt) {
-		this.address  = address ;
+		this.address = address ;
 		this.publicKey = publicKey ;
 		this.chainId = chainId;
 		this.createdAt = createdAt;
@@ -58,5 +57,4 @@ public class Wallet  {
 		
 	}
 	
-
 }

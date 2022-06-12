@@ -111,8 +111,7 @@ public class TradeService {
     			.sender(ctdto.getSender())
     			.to(ctdto.getTo())
     			.token_id(ctdto.getToken_id())
-    			.hash(hash).build())
-		;
+    			.hash(hash).build());
     	
     	return true ;
     	}
@@ -141,7 +140,7 @@ public class TradeService {
 		String uri = "https://kip7-api.klaytnapi.com/v1/contract/moonstone/transfer" ;
 		
 		JSONObject resultObj = new JSONObject();
-		
+
 		try {
 			
 			ResponseEntity<JSONObject> response = rt.exchange(uri, HttpMethod.POST, entity, JSONObject.class);

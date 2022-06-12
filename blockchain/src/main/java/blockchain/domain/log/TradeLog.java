@@ -43,7 +43,6 @@ public class TradeLog extends CreateTimeEntity {
 	@CreatedDate
 	private LocalDateTime createdDate;
 	
-
 	@Builder()
 	public TradeLog(String hash, String owner, String to, String sender, String token_id) {
 		this.token_id = token_id ;
@@ -52,7 +51,5 @@ public class TradeLog extends CreateTimeEntity {
 		this.receiver = to;
 		this.sender = sender ;
 	}
-	
-
 	
 }

@@ -4,7 +4,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.cloud.stream.messaging.Processor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import blockchain.domain.channel.NftInfoChannel;
+import blockchain.service.ExchangeService;
 import blockchain.service.NftService;
 import blockchain.service.TradeService;
 import blockchain.service.WalletService;
@@ -25,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Controller
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@EnableBinding(Processor.class)
 public class IndexController {
 	@Autowired
 	WalletService wls ;
@@ -34,6 +41,9 @@ public class IndexController {
 	
 	@Autowired
 	TradeService tradeservice;
+	
+	@Autowired
+	ExchangeService exchangeService;
 	
 	@Value("${token.header}")
 	String header ;
@@ -79,7 +89,7 @@ public class IndexController {
 		
 		return tradeservice.createTrade(ctdto);
 	}
-	
+
 	//token_id로 아이템의 거래 기록 조회
 	@GetMapping("/chain/tradeinfo")
 	public ResponseEntity<JSONObject> getNftTradeInfo(@RequestParam("tokenId") String token_id) throws ParseException {
@@ -110,9 +120,9 @@ public class IndexController {
 	
 	
 	@PostMapping("/test")
-	public void test() throws ParseException {
-
-		nfts.testMultiValueMap() ;
+	public ResponseEntity<JSONObject> test() throws ParseException {
+		exchangeService.test();
+		return nfts.testMultiValueMap() ;
 	}
 	
 	//컨트렉트에서 특정 사용자의 지갑 주소를 기준으로 사용자 소유의 nft 토큰들을 불러온다.
@@ -121,4 +131,15 @@ public class IndexController {
 	public ResponseEntity<JSONObject> createTransaction(@RequestParam("address") String wallet) {
 		return nfts.getNftInfo(wallet);
 	}
+	
+	@GetMapping("/test2")
+	public void test2() {
+		exchangeService.test();
+	}
+	
+    @StreamListener( NftInfoChannel.INPUT)
+    public void test(String wallet_address) throws ParseException {
+    	System.out.println(wallet_address);
+    	
+    }
 }
