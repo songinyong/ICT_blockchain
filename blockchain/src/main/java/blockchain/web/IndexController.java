@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import blockchain.domain.channel.NftInfoChannel;
 import blockchain.service.ExchangeService;
 import blockchain.service.NftService;
 import blockchain.service.TradeService;
@@ -31,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Controller
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@EnableBinding(Processor.class)
 public class IndexController {
 	@Autowired
 	WalletService wls ;
@@ -137,9 +135,4 @@ public class IndexController {
 		exchangeService.test();
 	}
 	
-    @StreamListener( NftInfoChannel.INPUT)
-    public void test(String wallet_address) throws ParseException {
-    	System.out.println(wallet_address);
-    	
-    }
 }
